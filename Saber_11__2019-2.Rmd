@@ -1,0 +1,81 @@
+---
+title: "Proyecto AED: Saber_11__2019-2"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r}
+library(readr)
+library(dplyr)
+```
+
+```{r}
+rm(list = ls())
+
+clc <- function(){
+    cat("\014")
+}
+
+clc()
+```
+# DATASET 2019-II
+
+```{r}
+datos_2019_2 = read.csv(file.path("/home/oscarvch03/Desktop/Proyecto_Analisis_Estadistico", "Saber_11__2019-2.csv"), sep = ";")
+datos_2019_2_clc = na.omit(data.frame(filter(datos_2019_2, ESTU_DEPTO_RESIDE != "")))
+head(datos_2019_2_clc)
+```
+
+```{r}
+(len = length(datos_2019_2_clc$ESTU_NACIONALIDAD))
+```
+```{r}
+# DISTRIBUCION POR DEPARTAMENTOS
+par(mar = c(10, 6, 4, 4))
+a = datos_2019_2_clc$ESTU_DEPTO_RESIDE
+barplot(table(a)[2:length(summary(a))], ylab = "Frecuencia", las = 3, 
+        main = "Departamentos 2019-II", col = rainbow(length(summary(a))))
+```
+```{r}
+# DISTRIBUCION POR GENEROS
+x1 = summary(datos_2019_2_clc$ESTU_GENERO)
+labels1 = round(100 * x1 / sum(x1), 2)
+leg1 = names(summary(datos_2019_2_clc$ESTU_GENERO))
+pie(x1, labels = labels1, radius = 1.4, main = "DISTRIBUCION POR GENERO 2019-II", col = rainbow(length(x1)))
+legend("topright", leg1, cex = 0.8, fill = rainbow(length(x1)))
+```
+```{r}
+# DISTRIBUCION POR ESTRATO
+x3 = summary(datos_2019_2_clc$FAMI_ESTRATOVIVIENDA)
+x3_n = x3[2:length(x3)]
+labels3 = round(100 * x3_n/ sum(x3_n), 2)
+leg3 = names(summary(datos_2019_2_clc$FAMI_ESTRATOVIVIENDA))[2:length(x3)]
+pie(x3_n, labels = labels3, radius = 1.4, main = "DISTRIBUCION POR ESTRATO 2019-II", col = rainbow(length(x3_n)))
+legend("topright", leg3, cex = 0.8, fill = rainbow(length(x3_n)))
+```
+```{r}
+# PUNTAJES >= 300 Y PUNTAJES < 300
+may1 = data.frame(filter(datos_2019_2_clc, PUNT_GLOBAL >= 300))
+men1 = data.frame(filter(datos_2019_2_clc, PUNT_GLOBAL < 300))
+len1 = dim(may1)[1]
+len2 = dim(men1)[1]
+(x5 = c(len1, len2))
+sum(x5)
+(labels5 = round(100 * x5 / sum(x5), 2))
+leg5 = c("Puntajes >= 300", "Puntajes < 300")
+pie(x5, labels = labels5, radius = 1.4, main = "PUNTAJES GLOBALES 2019-II", col = rainbow(length(x5)))
+legend("topright", leg5, cex = 0.65, fill = rainbow(length(x5)))
+
+punt_glob = datos_2019_2_clc$PUNT_GLOBAL
+boxplot(punt_glob, main = "PUNTAJES GLOBALES 2019-II", horizontal = TRUE, border = "red", col = "green")
+summary(punt_glob)
+```
+```{r}
+# PUNTAJES POR AREAS
+areas = datos_2019_2_clc[10:14]
+names(areas) = c("LEC", "MAT", "NAT", "CIU", "ING")
+summary(areas)
+boxplot(areas, main = "PUNTAJES GLOBALES 2019-II", horizontal = FALSE, border = "black", col = rev(rainbow(length(areas))), las = 2)
+```
+
