@@ -35,7 +35,7 @@ head(datos_2020_2_clc)
 par(mar = c(10, 6, 4, 4))
 b = datos_2020_2_clc$ESTU_DEPTO_RESIDE
 barplot(table(b)[2:length(summary(b))], ylab = "Frecuencia", las = 3, 
-        main = "Departamentos 2020-II", col = rainbow(length(summary(b))))
+        main = "DISTRIBUCION POR DEPARTAMENTOS 2020-II", col = rainbow(length(summary(b))))
 ```
 ```{r}
 # DISTRIBUCION POR GENEROS
@@ -64,7 +64,7 @@ len4 = dim(men2)[1]
 sum(x6)
 (labels6 = round(100 * x6 / sum(x6), 2))
 leg6 = c("Puntajes >= 300", "Puntajes < 300")
-pie(x6, labels = labels6, radius = 1.4, main = "PUNTAJES GLOBALES 2020-II", col = rainbow(length(x6)))
+pie(x6, labels = labels6, radius = 1.4, main = "DISTRIBUCION POR PUNTAJES \n GLOBALES 2020-II", col = rainbow(length(x6)))
 legend("topright", leg6, cex = 0.65, fill = rainbow(length(x6)))
 
 punt_glob = datos_2020_2_clc$PUNT_GLOBAL
@@ -76,5 +76,35 @@ summary(punt_glob)
 areas = datos_2020_2_clc[10:14]
 names(areas) = c("LEC", "MAT", "NAT", "CIU", "ING")
 summary(areas)
-boxplot(areas, main = "PUNTAJES GLOBALES 2020-II", horizontal = FALSE, border = "black", col = rev(rainbow(length(areas))), las = 2)
+boxplot(areas, main = "DIAGRAMAS DE CAJAS PUNTAJES \n POR AREAS 2020-II", horizontal = FALSE, border = "black", col = rev(rainbow(length(areas))), las = 2)
 ```
+```{r}
+# POBLACION DE OTRO PAIS
+(dim(filter(datos_2020_2_clc, ESTU_NACIONALIDAD == "COLOMBIA"))[1])
+(dim(filter(datos_2020_2_clc, ESTU_NACIONALIDAD == "VENEZUELA"))[1])
+extranj = data.frame(filter(datos_2020_2_clc, ESTU_NACIONALIDAD != "COLOMBIA" & ESTU_NACIONALIDAD != "VENEZUELA"))
+par(mar = c(12, 6, 4, 4))
+c = extranj$ESTU_NACIONALIDAD
+barplot(table(c)[c(1:10, 12:(length(summary(c)) - 4), (length(summary(c)) - 1):(length(summary(c))))], ylab = "Frecuencia", las = 3, 
+    main = "ESTUDIANTES EXTRANJEROS 2020-II", col = rainbow(length(summary(c))))
+```
+
+```{r}
+# ESTUDIANTES CON COMPUTADOR
+x8 = summary(datos_2020_2_clc$FAMI_TIENECOMPUTADOR)
+x8_n = x8[1:length(x8)]
+labels8 = round(100 * x8_n/ sum(x8_n), 2)
+leg8 = names(summary(datos_2020_2_clc$FAMI_TIENECOMPUTADOR))[1:length(x8)]
+pie(x8_n, labels = labels8, radius = 1.4, main = "¿ESTUDIANTE CON COMPUTADOR? 2020-II", col = rainbow(length(x8_n)))
+legend("topright", leg8, cex = 0.8, fill = rainbow(length(x8_n)))
+```
+```{r}
+# ESTUDIANTES CON INTERNET
+x10 = summary(datos_2020_2_clc$FAMI_TIENEINTERNET)
+x10_n = x10[1:length(x10)]
+labels10 = round(100 * x10_n/ sum(x10_n), 2)
+leg10 = names(summary(datos_2020_2_clc$FAMI_TIENEINTERNET))[1:length(x10)]
+pie(x10_n, labels = labels10, radius = 1.4, main = "¿ESTUDIANTE CON INTERNET? 2020-II", col = rainbow(length(x10_n)))
+legend("topright", leg10, cex = 0.8, fill = rainbow(length(x10_n)))
+```
+
