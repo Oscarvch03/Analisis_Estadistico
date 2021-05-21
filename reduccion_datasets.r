@@ -12,8 +12,8 @@ n = 20000
 sample19 = sample(1:nrow(datos_2019_2_clc), n, replace = F)
 sample20 = sample(1:nrow(datos_2020_2_clc), n, replace = F)
 
-cov1 = sample(c("No-Covid"), n, replace = T)
-cov2 = sample(c("Si-Covid"), n, replace = T)
+cov1 = sample(c(0), n, replace = T)
+cov2 = sample(c(1), n, replace = T)
 COVID = c(cov1, cov2)
 
 muestra19 = data.frame(datos_2019_2_clc[sample19, ])
