@@ -6,7 +6,6 @@ output:
 ---
 
 ```{r}
-library(readr)
 library(dplyr)
 ```
 
@@ -107,4 +106,3 @@ leg10 = names(summary(datos_2020_2_clc$FAMI_TIENEINTERNET))[1:length(x10)]
 pie(x10_n, labels = labels10, radius = 1.4, main = "¿ESTUDIANTE CON INTERNET? 2020-II", col = rainbow(length(x10_n)))
 legend("topright", leg10, cex = 0.8, fill = rainbow(length(x10_n)))
 ```
-

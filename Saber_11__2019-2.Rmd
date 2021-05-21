@@ -6,7 +6,6 @@ output:
 ---
 
 ```{r}
-library(readr)
 library(dplyr)
 ```
 
@@ -106,5 +105,9 @@ labels9 = round(100 * x9_n/ sum(x9_n), 2)
 leg9 = names(summary(datos_2019_2_clc$FAMI_TIENEINTERNET))[1:length(x9)]
 pie(x9_n, labels = labels9, radius = 1.4, main = "¿ESTUDIANTE CON INTERNET? 2019-II", col = rainbow(length(x9_n)))
 legend("topright", leg9, cex = 0.8, fill = rainbow(length(x9_n)))
+```
+```{r}
+(datos_2019_2.pca = princomp(data.frame(scale(areas))))
+datos_2019_2.pca$loadings
 ```
 
