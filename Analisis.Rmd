@@ -1,0 +1,12 @@
+---
+title: "Proyecto AED: Análisis"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r}
+datos = read.csv(file.path("/home/oscarvch03/Desktop/Proyecto_Analisis_Estadistico", "Saber11_20_1920_2.csv"), sep = ",")
+datos = datos[, 2:ncol(datos)]
+head(datos)
+```
