@@ -16,7 +16,7 @@ areas_m = as.matrix(datos[10:14])
 head(areas_m)
 disimilitud = as.dist(1 - cor(areas_m))
 hc1.comp = hclust(disimilitud, method="complete")
-plot(hc1.comp, main="Hierarchical Clustering with Scaled Features \n (Complete Linkage)", cex = 0.5, xlab = "")
+plot(hc1.comp, main="Clustering Jerárquico por Variables (Enlace Completo)", cex = 0.5, xlab = "", ylab = "")
 ```
 ```{r}
 # Clustering por Areas
@@ -24,28 +24,36 @@ library("scatterplot3d")
 k = 3
 km = kmeans(areas_m, k, nstart = 30)
 # plot(areas_m[ , 2], areas_m[ , 3], col = km$cluster+ 1)
-scatterplot3d(areas_m[ , c(1, 2, 5)], pch = 3, color = km$cluster + 1)
+scatterplot3d(areas_m[ , c(1, 2, 5)], pch = 1, color = km$cluster + 1, main = "Clustering con K-means para k = 3")
 table(datos$COVID, km$cluster + 1)
-# color rojo (2) les va regular
-# color verde (3) les va mejor
-# color azul (4) les va peor
-
 ```
 ```{r}
 # Componentes Principales
 library(PCAmixdata)
 datos.mix = splitmix(datos)
-datos.PCA = PCAmix(datos.mix$X.quanti, datos.mix$X.quali, rename.level = T, graph = F)
+datos.PCA = PCAmix(datos.mix$X.quanti, datos.mix$X.quali, ndim = 20, rename.level = T, graph = T)
 cat("\n")
 cat("\n")
 datos.PCA$quanti
-cat("\n")
-cat("\n")
-datos.PCA$quali
+# cat("\n")
+# cat("\n")
+# datos.PCA$quali$contrib
 ```
 ```{r}
+cuanti = datos.PCA$quanti$contrib.pct
+
+
+for(i in 1:nrow(cuanti)){
+    plot(1:20, cuanti[i, ], type = "b", pch = 5, lwd = 1, col = 2, xlim = c(0, 21), ylim = c(0, 50), main = "Proporciones de Varianza \n Componentes Principales", xlab = "Comp. Principal", ylab = "% de Varianza")
+    par(new = T)
+    cat(i, "\n")
+    #Sys.sleep(2)
+}
+```
+
+```{r}
 # Rotacion PCA
-datos.PCA.rot = PCArot(datos.pca, 5, graph = F)
+datos.PCA.rot = PCArot(datos.PCA, 5, graph = T)
 datos.PCA.rot$quanti
 cat("\n")
 cat("\n")
@@ -58,7 +66,7 @@ datos.PCA.rot$quali
 # Analisis de Factores
 class.var = c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 6), c(5))
 names = c("Car_Est", "Car_Fam", "Car_Col", "Puntajes", "Covid")
-datos.MFA = MFAmix(data = datos, groups = class.var, name.groups = names, rename.level = T,                      graph = F)
+datos.MFA = MFAmix(data = datos, groups = class.var, name.groups = names, rename.level = T,                      graph = T)
 summary(datos.MFA)
 ```
 ```{r}
@@ -77,7 +85,7 @@ pred_clas1 = predict(datos.LDA, areas_test)$class
 epsilon1 = 1 - sum(pred_clas1 == datos$COVID) / nrow(datos) 
 epsilon1
 table(datos$COVID[-trainIndex], pred_clas1)
-scatterplot3d(areas_test[ , c(1, 2, 5)], pch = 1, color = c(pred_clas1))
+scatterplot3d(areas_test[ , c(1, 2, 5)], pch = 1, color = c(pred_clas1), main = "Clasificación LDA tomando la variable COVID")
 ```
 ```{r}
 ## Discriminante Cuadratico
@@ -88,6 +96,12 @@ pred_clas2 = predict(datos.QDA, areas_test)$class
 epsilon2 = 1 - sum(pred_clas2 == datos$COVID) / nrow(datos) 
 epsilon2
 table(datos$COVID[-trainIndex], pred_clas2)
-scatterplot3d(areas_test[ , c(1, 2, 5)], pch = 1, color = c(pred_clas2))
+scatterplot3d(areas_test[ , c(1, 2, 5)], pch = 1, color = c(pred_clas2), main = "Clasificación QDA tomando la variable COVID")
+```
+```{r}
+datos.MANOVA = manova(cbind(PUNT_LECTURA_CRITICA, PUNT_MATEMATICAS, PUNT_C_NATURALES, PUNT_SOCIALES_CIUDADANAS, PUNT_INGLES) ~ COVID, data = datos)
+datos.MANOVA
+fit = summary(datos.MANOVA, test = "Wilks", multivariate = T)
+fit
 ```
 
